@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SITTA - Sistem Pemesanan Bahan Ajar UT</title>
+    <!-- LINK CSS EKSTERNAL -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <nav>
+            <div class="logo">
+                <div class="logo-icon">UT</div>
+                <span>SITTA - Sistem Pemesanan Bahan Ajar</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#" onclick="switchTab('pesan')">Pesan</a></li>
+                <li><a href="#" onclick="switchTab('riwayat')">Riwayat</a></li>
+                <li><a href="#" onclick="switchTab('distribusi')">Distribusi</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <div class="container">
+            <!-- TABS -->
+            <div class="tabs">
+                <button class="tab-button active" data-tab="pesan">📦 Pesan Bahan Ajar</button>
+                <button class="tab-button" data-tab="riwayat">📋 Riwayat Pesanan</button>
+                <button class="tab-button" data-tab="distribusi">🚚 Status Distribusi</button>
+            </div>
+
+            <!-- TAB 1: PESAN BAHAN AJAR -->
+            <div id="pesan" class="tab-content active">
+                <div id="alertContainer"></div>
+                
+                <form id="orderForm">
+                    <section class="form-section">
+                        <h2>Data Mahasiswa</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>NIM <span class="required">*</span></label>
+                                <input type="text" id="nim" name="nim" placeholder="Contoh: 530055123" maxlength="12">
+                                <span class="error-message" id="nimError">NIM harus diisi (minimal 9 digit)</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Nama Lengkap <span class="required">*</span></label>
+                                <input type="text" id="nama" name="nama" placeholder="Nama sesuai KTP">
+                                <span class="error-message" id="namaError">Nama harus diisi</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Email <span class="required">*</span></label>
+                                <input type="email" id="email" name="email" placeholder="contoh@email.com">
+                                <span class="error-message" id="emailError">Email tidak valid</span>
+                            </div>
+                            <div class="form-group">
+                                <label>No. Telepon <span class="required">*</span></label>
+                                <input type="tel" id="telepon" name="telepon" placeholder="08xxxxxxxxxx">
+                                <span class="error-message" id="teleponError">No. telepon tidak valid</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="form-section">
+                        <h2>Detail Pesanan</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Program Studi <span class="required">*</span></label>
+                                <select id="prodi" name="prodi">
+                                    <option value="">-- Pilih Program Studi --</option>
+                                    <option value="Manajemen">S1 Manajemen</option>
+                                    <option value="Akuntansi">S1 Akuntansi</option>
+                                    <option value="Ekonomi Pembangunan">S1 Ekonomi Pembangunan</option>
+                                    <option value="Sistem Informasi">S1 Sistem Informasi</option>
+                                    <option value="Teknologi Informasi">S1 Teknologi Informasi</option>
+                                    <option value="Ilmu Komunikasi">S1 Ilmu Komunikasi</option>
+                                    <option value="Administrasi Negara">S1 Administrasi Negara</option>
+                                    <option value="Hukum">S1 Ilmu Hukum</option>
+                                </select>
+                                <span class="error-message" id="prodiError">Program studi harus dipilih</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Semester <span class="required">*</span></label>
+                                <select id="semester" name="semester">
+                                    <option value="">-- Pilih Semester --</option>
+                                    <option value="1">Semester 1</option>
+                                    <option value="2">Semester 2</option>
+                                    <option value="3">Semester 3</option>
+                                    <option value="4">Semester 4</option>
+                                    <option value="5">Semester 5</option>
+                                    <option value="6">Semester 6</option>
+                                    <option value="7">Semester 7</option>
+                                    <option value="8">Semester 8</option>
+                                </select>
+                                <span class="error-message" id="semesterError">Semester harus dipilih</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Mata Kuliah <span class="required">*</span></label>
+                                <select id="matakuliah" name="matakuliah">
+                                    <option value="">-- Pilih Mata Kuliah --</option>
+                                </select>
+                                <span class="error-message" id="matakuliahError">Mata kuliah harus dipilih</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Jumlah Modul <span class="required">*</span></label>
+                                <input type="number" id="jumlah" name="jumlah" min="1" max="50" value="1">
+                                <span class="error-message" id="jumlahError">Jumlah minimal 1</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="form-section">
+                        <h2>Alamat Pengiriman</h2>
+                        <div class="form-grid">
+                            <div class="form-group" style="grid-column: 1 / -1;">
+                                <label>Alamat Lengkap <span class="required">*</span></label>
+                                <textarea id="alamat" name="alamat" rows="3" placeholder="Jalan, RT/RW, Kelurahan, Kecamatan"></textarea>
+                                <span class="error-message" id="alamatError">Alamat harus diisi</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Kota/Kabupaten <span class="required">*</span></label>
+                                <input type="text" id="kota" name="kota" placeholder="Contoh: Jakarta Selatan">
+                                <span class="error-message" id="kotaError">Kota harus diisi</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Provinsi <span class="required">*</span></label>
+                                <select id="provinsi" name="provinsi">
+                                    <option value="">-- Pilih Provinsi --</option>
+                                    <option value="DKI Jakarta">DKI Jakarta</option>
+                                    <option value="Jawa Barat">Jawa Barat</option>
+                                    <option value="Jawa Tengah">Jawa Tengah</option>
+                                    <option value="Jawa Timur">Jawa Timur</option>
+                                    <option value="Banten">Banten</option>
+                                    <option value="DI Yogyakarta">DI Yogyakarta</option>
+                                </select>
+                                <span class="error-message" id="provinsiError">Provinsi harus dipilih</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Kode Pos <span class="required">*</span></label>
+                                <input type="text" id="kodepos" name="kodepos" placeholder="12345" maxlength="5">
+                                <span class="error-message" id="kodeposError">Kode pos tidak valid (5 digit)</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary">✓ Submit Pesanan</button>
+                        <button type="button" class="btn btn-secondary" onclick="resetForm()">↻ Reset Form</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- TAB 2: RIWAYAT PESANAN -->
+            <div id="riwayat" class="tab-content">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3 id="totalPesanan">0</h3>
+                        <p>Total Pesanan</p>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #16a34a, #15803d);">
+                        <h3 id="totalSelesai">0</h3>
+                        <p>Pesanan Selesai</p>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                        <h3 id="totalProses">0</h3>
+                        <p>Dalam Proses</p>
+                    </div>
+                </div>
+
+                <div class="search-filter">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Cari berdasarkan NIM atau Nama..." onkeyup="searchOrders()">
+                    </div>
+                    <select class="filter-select" id="statusFilter" onchange="filterOrders()">
+                        <option value="">Semua Status</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Proses">Proses</option>
+                        <option value="Selesai">Selesai</option>
+                        <option value="Batal">Batal</option>
+                    </select>
+                </div>
+
+                <div class="table-container">
+                    <table id="ordersTable">
+                        <thead>
+                            <tr>
+                                <th>No. Order</th>
+                                <th>NIM</th>
+                                <th>Nama</th>
+                                <th>Mata Kuliah</th>
+                                <th>Jumlah</th>
+                                <th>Status</th>
+                                <th>Tanggal</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <tr>
+                                <td colspan="8" class="empty-state">
+                                    <div class="empty-state-icon">📦</div>
+                                    <p>Belum ada pesanan. Silakan buat pesanan baru!</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 3: STATUS DISTRIBUSI -->
+            <div id="distribusi" class="tab-content">
+                <h2>Tracking Distribusi Bahan Ajar</h2>
+                <div class="search-filter">
+                    <div class="search-box">
+                        <input type="text" id="trackingInput" placeholder="Masukkan nomor order untuk tracking...">
+                    </div>
+                    <button class="btn btn-primary" onclick="trackOrder()">🔍 Track Pesanan</button>
+                </div>
+
+                <div id="trackingResult"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL DETAIL -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Detail Pesanan</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be inserted by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2025 SITTA - Sistem Informasi Tata Tulis Administrasi | Universitas Terbuka</p>
+        <p>Developed for Web Programming Assignment</p>
+    </footer>
+
+    <!-- LINK JAVASCRIPT EKSTERNAL -->
+    <script src="script.js"></script>
+</body>
+</html>
